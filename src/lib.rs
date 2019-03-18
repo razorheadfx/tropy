@@ -59,7 +59,8 @@ pub fn slice_entropy(input: &[u8]) -> f64 {
     c.entropy()
 }
 
-pub fn hsl_to_rgb(h: f32, s: f32, l: f32) -> (u8, u8, u8) {
+fn _hsl_to_rgb(h: f32, s: f32, l: f32) -> (u8, u8, u8) {
+    // WIP
     // hsl to rgb conversion in the case i drop colorful in favour of termion
     assert!(0.0 <= h && h <= 1.0);
     assert!(0.0 <= s && s <= 1.0);
@@ -71,18 +72,19 @@ pub fn hsl_to_rgb(h: f32, s: f32, l: f32) -> (u8, u8, u8) {
         (g, g, g)
     } else {
         let c = (1.0 - (2.0 * l - 1.0).abs()) * s;
-        let x = c * (1.0 - (h / 6.0 % 2.0 - 1.0).abs());
-        let m = l - c / 2.0;
+        let _x = c * (1.0 - (h / 6.0 % 2.0 - 1.0).abs());
+        let _m = l - c / 2.0;
         unimplemented!()
     }
 }
 
 #[cfg(test)]
 mod test {
-    use crate::{hsl_to_rgb, slice_entropy};
-    #[test]
-    fn hsl() {
-        assert_eq!(hsl_to_rgb(0.0, 1.0, 0.5), (255, 0, 0));
+    use crate::slice_entropy;
+
+    fn _hsl() {
+        use crate::_hsl_to_rgb;
+        assert_eq!(_hsl_to_rgb(0.0, 1.0, 0.5), (255, 0, 0));
     }
 
     #[test]
