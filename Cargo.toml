@@ -1,0 +1,10 @@
+[package]
+name = "tropy"
+version = "0.1.0"
+authors = ["felix girke <felix.girke@tu-dortmund.de>"]
+edition = "2018"
+
+[dependencies]
+structopt = "0.2"
+colorful = "0.2"
+
