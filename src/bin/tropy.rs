@@ -1,12 +1,11 @@
-extern crate colorful;
 extern crate structopt;
 
-use colorful::{Colorful, HSL};
 use structopt::StructOpt;
 
 use std::fs::File;
 use std::io;
 use std::io::{BufRead, BufReader, Read, Write};
+use tropy::colour::{Hsl, Rgb};
 use tropy::Calculator;
 
 #[derive(Debug, StructOpt)]
@@ -18,28 +17,16 @@ struct Cfg {
     )]
     file: Option<String>,
     #[structopt(
-        short = "n",
         long = "chunksize",
         default_value = "1024",
         help = "The number of bytes to be read for each entropy calculation"
     )]
     chunksize: u32,
     #[structopt(
-        short = "c",
         long = "csv",
         help = "Output as csv to stdout instead of using color-coding on the terminal. Format: <startbyte>;<endbyte>;<entropy>"
     )]
     csv: bool,
-}
-
-fn display(e: f64, col: usize) {
-    if col % 80 == 0 {
-        println!();
-    }
-    // scale entropy to bits (i.e. value/8)
-    // i.e. perfectly uniform data would have an entropy of 1 (i.e. 8bits/byte)
-    let h = 240.0 / 360.0 + e / 8.0 * 120.0 / 360.0;
-    print!("{}", "█".hsl(h as f32, 1.0, 0.5));
 }
 
 fn main() -> io::Result<()> {
@@ -68,12 +55,28 @@ fn main() -> io::Result<()> {
 
     if !cfg.csv {
         // show colormap
-        eprintln!(
-            "* Color Scale: Entropy 0 {} 1",
-            "█"
-                .repeat(80 - 27)
-                .gradient_with_color(HSL::new(2.0 / 3.0, 1.0, 0.5), HSL::new(1.0, 1.0, 0.5))
-        );
+        eprint!("* Color Scale: Entropy 0 "); // 25 chars
+
+        let colormap_hue_start = 2.0 / 3.0;
+        let colormap_hue_end = 1.0;
+        let colormap_width = 80 - (25 + 2);
+        let step = (colormap_hue_end - colormap_hue_start) / colormap_width as f64;
+
+        (0..colormap_width)
+            .map(|i| i as f64 * step + colormap_hue_start)
+            .for_each(|hue| {
+                eprint!(
+                    "{}",
+                    Rgb::from(Hsl {
+                        h: hue * 360.0,
+                        s: 1.0,
+                        l: 0.5
+                    })
+                    .fg("█")
+                )
+            });
+
+        eprint!(" 1"); // 2 chars
     } else {
         // use raw data
         eprintln!("Outputting raw data as csv in the format <startbyte>;<endbyte>;<entropy>");
@@ -85,7 +88,21 @@ fn main() -> io::Result<()> {
         let e = c.entropy();
 
         if !cfg.csv {
-            display(e, chunknum);
+            if chunknum % 80 == 0 {
+                println!();
+            }
+            // scale entropy to bits (i.e. value/8)
+            // i.e. perfectly uniform data would have an entropy of 1 (i.e. 8bits/byte)
+            let h = 240.0 + e / 8.0 * 120.0;
+            print!(
+                "{}",
+                Rgb::from(Hsl {
+                    h: h,
+                    s: 1.0,
+                    l: 0.5
+                })
+                .fg("█")
+            );
         } else {
             // output as csv
             println!(

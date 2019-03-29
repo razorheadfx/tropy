@@ -23,8 +23,9 @@ impl Calculator {
         let e = self
             .counts
             .iter()
-            .filter(|c| *c > &0u64)
-            .map(|c| *c as f64 / bytes)
+            .cloned()
+            .filter(|c| c > &0u64)
+            .map(|c| c as f64 / bytes)
             .map(|p| p * p.log2())
             .fold(0.0, |h, x| h - x);
 
@@ -54,38 +55,17 @@ impl Write for Calculator {
 pub fn slice_entropy(input: &[u8]) -> f64 {
     let mut c = Calculator::new();
 
-    c.write(input).expect("This should never fail");
+    c.write_all(input)
+        .expect("Writing bytes to the calculator cannot fail");
 
     c.entropy()
 }
 
-fn _hsl_to_rgb(h: f32, s: f32, l: f32) -> (u8, u8, u8) {
-    // WIP
-    // hsl to rgb conversion in the case i drop colorful in favour of termion
-    assert!(0.0 <= h && h <= 1.0);
-    assert!(0.0 <= s && s <= 1.0);
-    assert!(0.0 <= l && l <= 1.0);
-
-    // calc chroma
-    if s == 0.0 {
-        let g = (255.0 * l) as u8;
-        (g, g, g)
-    } else {
-        let c = (1.0 - (2.0 * l - 1.0).abs()) * s;
-        let _x = c * (1.0 - (h / 6.0 % 2.0 - 1.0).abs());
-        let _m = l - c / 2.0;
-        unimplemented!()
-    }
-}
+pub mod colour;
 
 #[cfg(test)]
 mod test {
     use crate::slice_entropy;
-
-    fn _hsl() {
-        use crate::_hsl_to_rgb;
-        assert_eq!(_hsl_to_rgb(0.0, 1.0, 0.5), (255, 0, 0));
-    }
 
     #[test]
     fn calculate_entropy() {

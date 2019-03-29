@@ -6,5 +6,5 @@ edition = "2018"
 
 [dependencies]
 structopt = "0.2"
-colorful = "0.2"
+hsl = "0.1"
 
