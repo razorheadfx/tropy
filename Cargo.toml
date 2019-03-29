@@ -1,10 +1,24 @@
 [package]
-name = "tropy"
-version = "0.1.0"
-authors = ["felix girke <felix.girke@tu-dortmund.de>"]
-edition = "2018"
+name        = "tropy"
+version     = "0.1.0"
+authors     = ["felix girke <felix.girke@tu-dortmund.de>"]
+keywords    = ["entropy","commandline","cli","file"]
+description = "Entropy viewer for the command line"
+license     = "MPL-2.0"
+repository  = "https://github.com/razorheadfx/tropy"
+homepage    = "https://github.com/razorheadfx/tropy"
+readme      = "README.md"
+edition     = "2018"
 
 [dependencies]
 structopt = "0.2"
 hsl = "0.1"
 
+
+[features]
+default = ["binary"]
+binary = []
+
+[[bin]]
+name = "tropy"
+path = "src/bin/tropy.rs"
