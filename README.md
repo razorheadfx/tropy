@@ -17,8 +17,8 @@ cargo install tropy
 
 ```shell
 # for example to get the entropy of the tropy binary
-# in chunks of 512 bytes
-tropy ~/.cargo/bin/tropy --bytes 512
+# in chunks of 1024 bytes (the default value)
+tropy target/release/tropy --bytes 1024
 ```
 will yield something like this:
 ![example.png](example.png)
