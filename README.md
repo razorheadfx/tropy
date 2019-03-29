@@ -13,14 +13,30 @@ With [Rust installed](https://rustup.rs) run:
 cargo install tropy
 ``` 
 
+## Using the tropy command line tool
+
+```shell
+# for example to get the entropy of the tropy binary
+# in chunks of 512 bytes
+tropy ~/.cargo/bin/tropy --bytes 512
+```
+will yield something like this:
+![example.png](example.png)
+
+```shell
+# or read data from stdin and get the raw entropy as csv
+cat /dev/urandom | tropy - --csv
+```
+#
+
 ## Using tropy as a library
 Add this to your ```Cargo.toml```:
 ```toml
-...
 #[dependencies]
-...
+.
 tropy = { version = "0.1.0", default_features = false }
-...
+.
+
 ```
 And to use the entropy calculator in your program/library add this:
 ```rust
