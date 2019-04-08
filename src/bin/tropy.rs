@@ -36,6 +36,11 @@ fn main() {
     let cfg = Tropy::from_args();
     let mut r: Box<dyn BufRead> = {
         if cfg.file.eq("-") {
+            let s = io::stdin();
+            eprintln!("* Using stdin for input");
+            let r = BufReader::with_capacity(2048usize, s);
+            Box::new(r)
+        } else {
             let s = match File::open(&cfg.file) {
                 Ok(s) => s,
                 Err(e) => {
@@ -44,11 +49,6 @@ fn main() {
                 }
             };
             eprintln!("* Using {} for input", cfg.file);
-            let r = BufReader::with_capacity(2048usize, s);
-            Box::new(r)
-        } else {
-            let s = io::stdin();
-            eprintln!("* Using stdin for input");
             let r = BufReader::with_capacity(2048usize, s);
             Box::new(r)
         }
