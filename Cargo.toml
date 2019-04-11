@@ -1,6 +1,6 @@
 [package]
 name        = "tropy"
-version     = "0.1.0"
+version     = "0.1.1"
 authors     = ["felix girke <felix.girke@tu-dortmund.de>"]
 keywords    = ["entropy","commandline","cli","file"]
 description = "Entropy viewer for the command line"
