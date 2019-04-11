@@ -8,7 +8,9 @@ The tropy commandline tool takes bytes or input from std in and calculates the [
 Ever wondered whether a certain file (e.g. a application binary or firmware blob) contains __encrypted__ or __compressed__ data?
 Information theoretical entropy is a good indicator of both cases, as both compression and encryption aim to distribute the symbol (byte value) probabilities evenly across the entire range of states a symbol (byte) can be in.
 
-A good compression algorithm will strive to convert common bit/byte patterns in the input into a (bit-wise) shorter representation by number of means, thus encode more bits into one byte.
+A good compression algorithm will strive to convert common bit/byte patterns in the input into a (bit-wise) shorter representation by number of means.
+Ideally, the output is evenly distributed across all possible states of the byte (symbol), since dominance of a single state would be an indicator of another common pattern which could be compressed further.
+
 Encryption on the other hand aims to pseudo-randomize the input, which also increases entropy by (among others) preventing telling patterns of the input from leaking into the output.
 
 With tropy such sections of high entropy are very easily identified as red areas (i.e. chunks of the data where entropy is nearly 8bit/byte).
@@ -20,7 +22,6 @@ cargo install tropy
 ``` 
 
 ## Using the tropy command line tool
-
 ```shell
 # for example to get the entropy of the tropy binary
 # in chunks of 1024 bytes (the default value)
