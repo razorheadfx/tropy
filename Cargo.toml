@@ -22,3 +22,4 @@ binary = []
 [[bin]]
 name = "tropy"
 path = "src/bin/tropy.rs"
+required-features = ["binary"]

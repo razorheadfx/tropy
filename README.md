@@ -2,6 +2,7 @@
 [![Latest Version](https://img.shields.io/crates/v/tropy.svg)](https://crates.io/crates/tropy)
 [![Documentation](https://docs.rs/tropy/badge.svg)](https://docs.rs/crate/tropy)
 ![License](https://img.shields.io/crates/l/tropy.svg)
+[![dependency status](https://deps.rs/repo/github/razorheadfx/tropy/status.svg)](https://deps.rs/repo/github/razorheadfx/tropy)
 
 ## What is tropy and what would you use it for?
 The tropy commandline tool takes bytes or input from std in and calculates the [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) then it display them colour coded in the terminal.

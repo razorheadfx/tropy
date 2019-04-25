@@ -1,0 +1,17 @@
+language: rust
+cache: cargo
+git:
+  depth: 1
+script: >
+  cargo build --verbose --all --no-default-features  --features "$FEATURES"
+  && cargo test --verbose --all --no-default-features --features "$FEATURES"
+rust:
+  - stable
+  - nightly
+env:
+  matrix:
+    - FEATURES=''
+    - FEATURES='binary'
+matrix:
+  allow_failures:
+    - rust: nightly
