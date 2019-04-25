@@ -2,6 +2,7 @@
 [![Latest Version](https://img.shields.io/crates/v/tropy.svg)](https://crates.io/crates/tropy)
 [![Documentation](https://docs.rs/tropy/badge.svg)](https://docs.rs/crate/tropy)
 ![License](https://img.shields.io/crates/l/tropy.svg)
+[![Build Status](https://travis-ci.org/razorheadfx/tropy.svg?branch=master)](https://travis-ci.org/razorheadfx/tropy)
 [![dependency status](https://deps.rs/repo/github/razorheadfx/tropy/status.svg)](https://deps.rs/repo/github/razorheadfx/tropy)
 
 ## What is tropy and what would you use it for?
