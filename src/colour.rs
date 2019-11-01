@@ -76,5 +76,4 @@ mod test {
         write!(su, "{}", RGB::Fg(Rgb(255, 255, 255), "blaaa")).unwrap();
         assert_eq!(s, String::from_utf8(su).unwrap());
     }
-
 }
