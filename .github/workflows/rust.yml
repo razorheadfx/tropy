@@ -32,7 +32,7 @@ jobs:
         with:
           command: test
 
-# run rustfmt only on linux as behaviour of rustfmt should be same across OSes
+# run rustfmt only on linux with stable toolchain as behaviour of rustfmt should be same across OSes
   fmt:
     name: Check if Code is RustFmt'ed
     runs-on: ubuntu-latest
@@ -40,7 +40,6 @@ jobs:
       matrix:
         rust:
           - stable
-          - nightly
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
