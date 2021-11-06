@@ -2,7 +2,6 @@ extern crate structopt;
 
 use structopt::StructOpt;
 
-use std::error::Error;
 use std::fs::File;
 use std::io;
 use std::io::{BufRead, BufReader, Read, Write};
@@ -44,7 +43,7 @@ fn main() {
             let s = match File::open(&cfg.file) {
                 Ok(s) => s,
                 Err(e) => {
-                    eprintln!("Opening file failed with: {}", e.description());
+                    eprintln!("Opening file failed with: {}", e.to_string());
                     exit(e.raw_os_error().unwrap_or(1))
                 }
             };
@@ -91,7 +90,11 @@ fn main() {
         println!("\"start\";\"entropy\"");
     }
 
-    while let Ok(_) = r.read_exact(&mut buf[..]).and_then(|_| c.write(&buf[..])) {
+    while r
+        .read_exact(&mut buf[..])
+        .and_then(|_| c.write(&buf[..]))
+        .is_ok()
+    {
         let e = c.entropy();
 
         if !cfg.csv {
@@ -101,15 +104,7 @@ fn main() {
             // scale entropy to bits (i.e. value/8)
             // i.e. perfectly uniform data would have an entropy of 1 (i.e. 8bits/byte)
             let h = 240.0 + e / 8.0 * 120.0;
-            print!(
-                "{}",
-                Rgb::from(Hsl {
-                    h: h,
-                    s: 1.0,
-                    l: 0.5
-                })
-                .fg("█")
-            );
+            print!("{}", Rgb::from(Hsl { h, s: 1.0, l: 0.5 }).fg("█"));
         } else {
             // output as csv
             println!("{};{:.6}", chunknum * chunksize, e);
