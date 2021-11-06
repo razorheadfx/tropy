@@ -6,7 +6,8 @@ on:
     - cron: "* * 15 * *"
 # based on actions-rs msrv example
 # https://github.com/actions-rs/example/blob/23ffb1bf0016f41999902ba7542b4f1bb1a89c48/.github/workflows/msrv.yml
-name: Rustfmt, Run tests & Clippy
+name: Check rustfmt, run tests and clippy
+jobs:
   test:
     name: Run Test Suite on Linux, Windows & MacOs
     # run on latest ubuntu, macos, windows
