@@ -9,7 +9,7 @@ use std::process::exit;
 use tropy::colour::{Hsl, Rgb};
 use tropy::Calculator;
 
-/// Read bytes from file or stdin and calculate the Shannon entropy for for chunks of a fixed size.
+/// Read bytes from file or stdin and calculate the Shannon entropy for chunks of a fixed size.
 /// Then display it colour-coded in the terminal or write it to stdout as csv.
 #[derive(Debug, StructOpt)]
 struct Tropy {
@@ -43,7 +43,7 @@ fn main() {
             let s = match File::open(&cfg.file) {
                 Ok(s) => s,
                 Err(e) => {
-                    eprintln!("Opening file failed with: {}", e.to_string());
+                    eprintln!("Opening file failed with: {}", e);
                     exit(e.raw_os_error().unwrap_or(1))
                 }
             };
