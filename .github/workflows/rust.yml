@@ -65,10 +65,6 @@ jobs:
         platform:
           - ubuntu-latest
     runs-on: ${{ matrix.platform }}
-    strategy:
-      matrix:
-        rust:
-          - stable
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
