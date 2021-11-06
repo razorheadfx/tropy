@@ -1,3 +1,4 @@
+use std::default::Default;
 use std::io;
 use std::io::Write;
 
@@ -29,10 +30,7 @@ pub struct Calculator {
 impl Calculator {
     /// Instantiate a new calculator.
     pub fn new() -> Self {
-        Calculator {
-            counts: Box::new([0u64; 256]),
-            nbytes: 0,
-        }
+        Self::default()
     }
 
     /// Calculate Shannon entropy over the bytes written so far and clear the calculator's internal state.
@@ -67,6 +65,15 @@ impl Write for Calculator {
 
     fn flush(&mut self) -> io::Result<()> {
         Ok(())
+    }
+}
+
+impl Default for Calculator {
+    fn default() -> Self {
+        Calculator {
+            counts: Box::new([0u64; 256]),
+            nbytes: 0,
+        }
     }
 }
 
