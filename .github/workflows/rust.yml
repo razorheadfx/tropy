@@ -1,36 +1,27 @@
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  schedule:
+  # run at least once a month
+    - cron: "* * 15 * *"
 # based on actions-rs msrv example
 # https://github.com/actions-rs/example/blob/23ffb1bf0016f41999902ba7542b4f1bb1a89c48/.github/workflows/msrv.yml
-name: Rustfmt check, run tests & clippy
 
+name: Check rustfmt, run tests and clippy
 jobs:
-  check:
-    name: Check
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        rust:
-          - stable
-          - nightly
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: ${{ matrix.rust }}
-          override: true
-      - uses: actions-rs/cargo@v1
-        with:
-          command: check
-
   test:
-    name: Test Suite
-    runs-on: ubuntu-latest
+    name: Run Test Suite on Linux, Windows & MacOs
+    # run on latest ubuntu, macos, windows
     strategy:
       matrix:
         rust:
           - stable
           - nightly
+        platform:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+    runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
@@ -42,14 +33,16 @@ jobs:
         with:
           command: test
 
+# run rustfmt only on linux with stable toolchain as behaviour of rustfmt should be same across OSes
   fmt:
-    name: Rustfmt
-    runs-on: ubuntu-latest
+    name: Check if Code is RustFmt'ed
     strategy:
       matrix:
         rust:
           - stable
-          - nightly
+        platform:
+          - ubuntu-latest
+    runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
@@ -64,13 +57,14 @@ jobs:
           args: --all -- --check
 
   clippy:
-    name: Clippy
-    runs-on: ubuntu-latest
+    name: Run Clippy on ubuntu with stable toolchain & only log warnings (no failures)
     strategy:
       matrix:
         rust:
           - stable
-          - nightly
+        platform:
+          - ubuntu-latest
+    runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
@@ -82,4 +76,19 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: clippy
-          args: -- -D warnings
+          args: --
+  
+  security_audit:
+    name: Security audit the cargo dependencies on ubuntu with stable toolchain
+    strategy:
+      matrix:
+        rust:
+          - stable
+        platform:
+          - ubuntu-latest
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions-rs/audit-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
