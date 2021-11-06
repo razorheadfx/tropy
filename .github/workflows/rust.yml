@@ -6,6 +6,7 @@ on:
     - cron: "* * 15 * *"
 # based on actions-rs msrv example
 # https://github.com/actions-rs/example/blob/23ffb1bf0016f41999902ba7542b4f1bb1a89c48/.github/workflows/msrv.yml
+
 name: Check rustfmt, run tests and clippy
 jobs:
   test:
@@ -35,11 +36,13 @@ jobs:
 # run rustfmt only on linux with stable toolchain as behaviour of rustfmt should be same across OSes
   fmt:
     name: Check if Code is RustFmt'ed
-    runs-on: ubuntu-latest
     strategy:
       matrix:
         rust:
           - stable
+        platform:
+          - ubuntu-latest
+    runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
@@ -54,8 +57,14 @@ jobs:
           args: --all -- --check
 
   clippy:
-    name: Run Clippy on stable & only log warnings (no failures)
-    runs-on: ubuntu-latest
+    name: Run Clippy on ubuntu with stable toolchain & only log warnings (no failures)
+    strategy:
+      matrix:
+        rust:
+          - stable
+        platform:
+          - ubuntu-latest
+    runs-on: ${{ matrix.platform }}
     strategy:
       matrix:
         rust:
@@ -72,3 +81,18 @@ jobs:
         with:
           command: clippy
           args: --
+  
+  security_audit:
+    name: Security audit the cargo dependencies on ubuntu with stable toolchain
+    strategy:
+      matrix:
+        rust:
+          - stable
+        platform:
+          - ubuntu-latest
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions-rs/audit-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
