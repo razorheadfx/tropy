@@ -22,8 +22,8 @@ jobs:
             artifact_name: tropy
             asset_name: tropy-macos-amd64
           - os: windows-latest
-            artifact_name: tropy
-            asset_name: tropy-windows-amd64
+            artifact_name: tropy.exe
+            asset_name: tropy-windows-amd64.exe
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
